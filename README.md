@@ -1,5 +1,5 @@
-# Pony Chat
-Adapted from the TCP Listener example in the Pony language samples. This is my first Pony application and I used it as an experiment to see what it looks like to build an actor-based, multi-user interactive system.
+# PonyMUD
 
-Because I'm old as dirt and still have fond memories of MUDs, I chose to model the networking on text-based, telnet input.
+A text adventure game written in Pony as a learning exercise to become more familiar with the language and to use as an illustration for various
+language concepts. In every way possible, the aim of PonyMUD is to harness the power of the actor model and completely asynchronous processing.
 
