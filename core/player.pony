@@ -1,5 +1,7 @@
 use "net"
 use "promises"
+use "files"
+
 use "../server"
 use "../cmd"
 
@@ -10,13 +12,17 @@ actor Player is (Container & Combatant & CommandHandlerContainer)
     var _pname: (String | None) = None 
     let _container: DefaultActorStorage
     let _cmdmap: DefaultCommandHandlerMap
+    let _respath: FilePath 
 
-    new create(cm: ConnectionManager tag, conn: TCPConnection tag, out:OutStream) =>
+    new create(cm: ConnectionManager tag, conn: TCPConnection tag, out:OutStream, resourcepath: FilePath) =>
         _cm = cm 
         _conn = conn   
         _out = out     
+        _respath = resourcepath
         _cmdmap = DefaultCommandHandlerMap 
         _container = DefaultActorStorage 
+
+        _conn.write(ResourceReader.read_resource(_respath, "motd.txt"))
         initcommands()
 
     be tell(msg: String) =>
@@ -35,30 +41,21 @@ actor Player is (Container & Combatant & CommandHandlerContainer)
     be parsecommand(cmd: String) =>
         if _pname is None then
             _pname = cmd
-            _conn.write("You've chosen a name.\n")                 
+            _conn.write("Welcome back to PonyMUD, " + _name() + "!\n")                 
             emitall("has logged in.\n")    
-            return
-        else 
-            //_conn.write("[Debug] You typed " + cmd + ".\n" )
-            emitall("typed '" + cmd + "'\n")
+            return       
         end 
+
         let parts = cmd.split_by(" ")
         try
             let ch = _cmdmap.get(parts(0))
             ch.handle_verb(parts(0), recover Array[String] end) // TODO send the other parts
         else  
             this.tell("Unknown Command.\n")
-        end
-        /*if cmd == "who" then
-            //_cm.dowho(this) 
-            try 
-                let ch = _cmdmap.get("who")
-                ch.handle_verb("who", recover Array[String] end)
-            end                        
-        end */
+        end        
 
     be emitall(text: String) =>
-        _cm.broadcast(_name() + " " + text)
+        _cm.broadcast(this, _name() + " " + text)
 
     fun ref invstorage(): ActorStorage => _container 
 

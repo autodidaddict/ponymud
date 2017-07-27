@@ -1,21 +1,24 @@
 use "net"
+use "files"
 use "collections"
 use "promises"
 use "../core"
 
 actor ConnectionManager
   let _out: OutStream 
+  let _respath: FilePath
   let _players: MapIs[TCPConnection, Player]  
   
-  new create(out: OutStream) =>
+  new create(out: OutStream, respath: FilePath) =>
     _players = MapIs[TCPConnection, Player]
+    _respath = respath 
 
     _out = out 
     _out.print("connection manager created")
 
   be accepted(conn: TCPConnection tag) =>
     _out.print("[CM] Connection accepted.")
-    let p = Player(this, conn, _out)
+    let p = Player(this, conn, _out, _respath)
     _players(conn) = p
     
     _out.print(_players.size().string() + " players online.")    
@@ -40,10 +43,12 @@ actor ConnectionManager
         _players(conn).parsecommand(cmd)        
     end 
 
-  be broadcast(msg: String) =>
-    _bcast(msg)
+  be broadcast(source: Player, msg: String) =>
+    _bcast(source, msg)
 
-  fun _bcast(msg: String) =>
+  fun _bcast(source: Player, msg: String) =>
     for player in _players.values() do
-        player.tell(msg)
+        if not (player is source) then
+          player.tell(msg)
+        end
     end
