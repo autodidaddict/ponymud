@@ -4,10 +4,12 @@ use "../core"
 use "collections"
 use "promises"
 
+type _CmdParent is (TerminalConnected tag & CommandHandlerContainer tag)
+
 actor CmdList is CommandHandler 
-  let _parent: Player
+  let _parent: _CmdParent tag
   
-  new create(parent: Player) =>
+  new create(parent: _CmdParent tag) =>
     _parent = parent
   
     _parent.register_commandhandler("cmds", this)
