@@ -1,6 +1,8 @@
 use "../server"
 use "../core"
 
+use "promises"
+
 actor CmdWho is CommandHandler 
   let _parent: Player tag
   let _cm: ConnectionManager tag 
@@ -13,3 +15,6 @@ actor CmdWho is CommandHandler
 
   be handle_verb(verb: String val, params: Array[String] val) =>
     _cm.dowho(_parent)
+
+  be identify(p: Promise[CommandHandlerMetadata]) =>
+    p(CommandHandlerMetadata("who", "players"))

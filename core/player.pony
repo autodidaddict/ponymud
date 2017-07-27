@@ -5,7 +5,10 @@ use "files"
 use "../server"
 use "../cmd"
 
-actor Player is (Container & Combatant & CommandHandlerContainer)
+trait TerminalConnected
+  be tell(msg: String)
+
+actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConnected)
     let _out: OutStream
     let _conn: TCPConnection tag 
     let _cm: ConnectionManager tag 
@@ -59,6 +62,16 @@ actor Player is (Container & Combatant & CommandHandlerContainer)
 
     fun ref invstorage(): ActorStorage => _container 
 
+    be enumerate_commands(ip: CollectionReceiver[CommandHandlerMetadata] tag) =>
+        let cmds: Array[CommandHandler tag] = commandhandlers().allcommands() 
+        let collector: Collector[CommandHandlerMetadata] = Collector[CommandHandlerMetadata](cmds.size(), ip)
+
+        for cmd in cmds.values() do
+          let p = Promise[CommandHandlerMetadata]
+          p.next[None](recover collector~receive() end)
+          cmd.identify(p)
+        end 
+
     fun ref commandhandlers(): CommandHandlerMap => _cmdmap 
 
     be attacked_by(ob: Any tag) =>
@@ -66,6 +79,7 @@ actor Player is (Container & Combatant & CommandHandlerContainer)
 
     fun ref initcommands() =>
         CmdWho(this, _cm)
+        CmdList(this)
         
     fun _name(): String =>
         match _pname

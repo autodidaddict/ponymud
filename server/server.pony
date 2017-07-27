@@ -29,7 +29,7 @@ class Listener is TCPListenNotify
 
 class Server is TCPConnectionNotify
   let _out: OutStream
-  let _cm: ConnectionManager tag
+  let _cm: ConnectionManager
 
   new iso create(out: OutStream, cm: ConnectionManager tag) =>
     _out = out
@@ -52,3 +52,4 @@ class Server is TCPConnectionNotify
 
   fun ref connect_failed(conn: TCPConnection ref) =>
     _out.print("connect failed")
+    
