@@ -10,10 +10,10 @@ class DefaultCommandHandlerMap is CommandHandlerMap
     _storage(verb) = handler 
 
   fun get(verb: String) : CommandHandler tag? =>    
-    _storage(verb)
+    _storage(verb)?
     
   fun allcommands() : Array[CommandHandler tag] =>
     Array[CommandHandler tag].>concat(_storage.values())
 
   fun ref remove(verb: String)? =>
-    _storage.remove(verb)
+    _storage.remove(verb)?

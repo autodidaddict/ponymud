@@ -51,8 +51,8 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
 
         let parts = cmd.split_by(" ")
         try
-            let ch = _cmdmap.get(parts(0))
-            ch.handle_verb(parts(0), recover Array[String] end) // TODO send the other parts
+            let ch = _cmdmap.get(parts(0)?)?
+            ch.handle_verb(parts(0)?, recover Array[String] end) // TODO send the other parts
         else  
             this.tell("Unknown Command.\n")
         end        

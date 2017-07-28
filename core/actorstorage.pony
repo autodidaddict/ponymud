@@ -15,6 +15,6 @@ class DefaultActorStorage is ActorStorage
 
   fun ref remove(o: Any tag) =>
     try
-      let idx = _storage.find(o)
-      _storage.delete(idx)
+      let idx = _storage.find(o)?
+      _storage.delete(idx)?
     end 

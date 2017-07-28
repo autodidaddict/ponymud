@@ -33,14 +33,14 @@ actor ConnectionManager
 
   be closed(conn: TCPConnection tag) =>
     try      
-      _players.remove(conn)      
+      _players.remove(conn)?
     end
     _out.print("[CM] Connection closed.")
 
   be cmdreceived(conn: TCPConnection, cmd: String) =>
     _out.print("[CM] received command text.")
     try 
-        _players(conn).parsecommand(cmd)        
+        _players(conn)?.parsecommand(cmd)
     end 
 
   be broadcast(source: Player, msg: String) =>

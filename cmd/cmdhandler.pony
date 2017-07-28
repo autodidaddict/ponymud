@@ -25,7 +25,7 @@ trait CommandHandlerContainer
 
   be unregister_commandhandler(verb: String) =>
     try
-      commandhandlers().remove(verb)
+      commandhandlers().remove(verb)?
     end
 
   be enumerate_commands(ip:  CollectionReceiver[CommandHandlerMetadata val] tag)   
