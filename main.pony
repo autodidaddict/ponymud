@@ -1,10 +1,12 @@
 use "net"
 use "files"
+use "debug"
 
 use "./server"
 
 actor Main
-  new create(env: Env) =>    
+  new create(env: Env) => 
+    Debug.out("Start.")   
     try
       let resource_path = FilePath(env.root as AmbientAuth, "./res")?
       let cm = ConnectionManager(env.out, resource_path)

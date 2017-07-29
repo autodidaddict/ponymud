@@ -14,7 +14,7 @@ actor CmdList is CommandHandler
   
     _parent.register_commandhandler("cmds", this)
     _parent.register_commandhandler("commands", this)
-
+  
   be handle_verb(verb: String val, params: Array[String] val) =>
     _parent.enumerate_commands(this)    
 

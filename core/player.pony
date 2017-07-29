@@ -1,6 +1,7 @@
 use "net"
 use "promises"
 use "files"
+use "debug"
 
 use "../server"
 use "../cmd"
@@ -8,7 +9,7 @@ use "../cmd"
 trait TerminalConnected
   be tell(msg: String)
 
-actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConnected)
+actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConnected & GameObject)
     let _out: OutStream
     let _conn: TCPConnection tag 
     let _cm: ConnectionManager tag 
@@ -16,14 +17,17 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
     let _container: DefaultActorStorage
     let _cmdmap: DefaultCommandHandlerMap
     let _respath: FilePath 
+    var _currentloc: Room tag
 
-    new create(cm: ConnectionManager tag, conn: TCPConnection tag, out:OutStream, resourcepath: FilePath) =>
+    new create(init_loc: Room tag, cm: ConnectionManager tag, conn: TCPConnection tag, out:OutStream, resourcepath: FilePath) =>
+        Debug.out("Player created")
         _cm = cm 
         _conn = conn   
         _out = out     
         _respath = resourcepath
         _cmdmap = DefaultCommandHandlerMap 
         _container = DefaultActorStorage 
+        _currentloc = init_loc
 
         _conn.write(ResourceReader.read_resource(_respath, "motd.txt"))
         initcommands()
@@ -55,7 +59,13 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
             ch.handle_verb(parts(0)?, recover Array[String] end) // TODO send the other parts
         else  
             this.tell("Unknown Command.\n")
-        end        
+        end           
+        let p = Promise[ExaminationResult]
+        p.next[None](recover this~ex() end)
+        _currentloc.examine(p)
+
+    be ex(er: ExaminationResult) =>
+        this.tell("You are in " + er.name + "!\n")
 
     be emitall(text: String) =>
         _cm.broadcast(this, _name() + " " + text)
@@ -87,4 +97,10 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
         else
             "Someone"
         end 
+
+    fun location(): Room tag =>
+        _currentloc 
+
+    fun ref set_location(loc: Room tag) =>
+        _currentloc = loc
 
