@@ -13,9 +13,13 @@ actor CmdExamine is CommandHandler
     _parent.register_commandhandler("examine", this)
 
   be handle_verb(verb: String val, params: Array[String] val) =>
-    let p = Promise[Room tag]
-    p.next[None](recover this~exroom() end)
-    _parent.environment(p)
+    if params.size() > 0 then
+      _parent.tell("We don't yet support examining individual objects.\n")
+    else
+      let p = Promise[Room tag]
+      p.next[None](recover this~exroom() end)
+      _parent.environment(p)
+    end
 
   be exroom(room: Room tag) =>
     let p = Promise[ExaminationResult]
