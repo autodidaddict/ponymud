@@ -18,10 +18,9 @@ actor ConnectionManager
 
   be accepted(conn: TCPConnection tag) =>
     _out.print("[CM] Connection accepted.")
-    let p = Player(this, conn, _out, _respath)
-    _players(conn) = p
-    
-    _out.print(_players.size().string() + " players online.")    
+    let v = TheVoid.create()
+    let p = Player(v, this, conn, _out, _respath)
+    _players(conn) = p    
 
   be dowho(requester: Player tag) =>
     let collector: Collector[String] = Collector[String](_players.size(), requester)
