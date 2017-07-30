@@ -60,12 +60,9 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
         else  
             this.tell("Unknown Command.\n")
         end           
-        let p = Promise[ExaminationResult]
-        p.next[None](recover this~ex() end)
-        _currentloc.examine(p)
-
-    be ex(er: ExaminationResult) =>
-        this.tell("You are in " + er.name + "!\n")
+        //let p = Promise[ExaminationResult]
+        //p.next[None](recover this~ex() end)
+        //_currentloc.examine(p)
 
     be emitall(text: String) =>
         _cm.broadcast(this, _name() + " " + text)
@@ -90,6 +87,7 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
     fun ref initcommands() =>
         CmdWho(this, _cm)
         CmdList(this)
+        CmdExamine(this)
         
     fun _name(): String =>
         match _pname
