@@ -1,6 +1,6 @@
 use "promises"
 
-use "../core"
+use "../std"
 
 class val CommandHandlerMetadata
   let name : String

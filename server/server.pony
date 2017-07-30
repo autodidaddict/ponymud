@@ -1,5 +1,5 @@
 use "net"
-use "../core"
+use "../std"
 
 class Listener is TCPListenNotify
   let _out: OutStream

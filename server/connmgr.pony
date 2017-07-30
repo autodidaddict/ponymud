@@ -2,7 +2,7 @@ use "net"
 use "files"
 use "collections"
 use "promises"
-use "../core"
+use "../std"
 
 actor ConnectionManager
   let _out: OutStream 

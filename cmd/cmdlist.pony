@@ -1,5 +1,5 @@
 use "../server"
-use "../core"
+use "../std"
 
 use "collections"
 use "promises"
