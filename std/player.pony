@@ -29,6 +29,8 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
         _container = DefaultActorStorage 
         _currentloc = init_loc
 
+        _currentloc.enter_inv(this, _currentloc)
+
         _conn.write(ResourceReader.read_resource(_respath, "motd.txt"))
         initcommands()
 

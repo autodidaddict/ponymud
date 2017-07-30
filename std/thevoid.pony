@@ -9,8 +9,8 @@ actor TheVoid is (Container & Examinable)
     _contents = DefaultActorStorage
 
   be examine(p: Promise[ExaminationResult]) =>
-    Debug.out("The void examined")
-    p(ExaminationResult("void", "The Void", "This is the void"))
+    Debug.out("The void examined")    
+    p(ExaminationResult("void", "The Void", "This is the void", _contents.allitems()))
 
   fun ref invstorage(): ActorStorage => _contents 
 

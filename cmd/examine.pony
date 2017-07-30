@@ -28,6 +28,7 @@ actor CmdExamine is CommandHandler
 
   be displayexresult(er: ExaminationResult) =>
      _parent.tell(er.short + "\n" + er.long_description + "\n")
+     _parent.tell("There are " + er.contents.size().string() + " objects here.\n")
 
   be identify(p: Promise[CommandHandlerMetadata]) =>
     p(CommandHandlerMetadata("look", "examine"))

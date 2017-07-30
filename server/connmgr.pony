@@ -8,18 +8,19 @@ actor ConnectionManager
   let _out: OutStream 
   let _respath: FilePath
   let _players: MapIs[TCPConnection, Player]  
+  let _theVoid: Room tag
   
   new create(out: OutStream, respath: FilePath) =>
     _players = MapIs[TCPConnection, Player]
     _respath = respath 
-
+    _theVoid = TheVoid 
     _out = out 
     _out.print("connection manager created")
 
   be accepted(conn: TCPConnection tag) =>
     _out.print("[CM] Connection accepted.")
-    let v = TheVoid.create()
-    let p = Player(v, this, conn, _out, _respath)
+    
+    let p = Player(_theVoid, this, conn, _out, _respath)
     _players(conn) = p    
 
   be dowho(requester: Player tag) =>
