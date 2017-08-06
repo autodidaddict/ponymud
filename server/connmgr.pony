@@ -1,3 +1,4 @@
+
 use "net"
 use "files"
 use "collections"
@@ -23,13 +24,19 @@ actor ConnectionManager
     let p = Player(_theVoid, this, conn, _out, _respath)
     _players(conn) = p    
 
-  be dowho(requester: Player tag) =>
-    let collector: Collector[String] = Collector[String](_players.size(), requester)
+  be who(p: Promise[Array[String val] val]) =>
+    let names: Array[Promise[String]] = Array[Promise[String]]
     for player in _players.values() do
-      let p = Promise[String]
-      p.next[None](recover collector~receive() end)
-      player.gathername(p)
+      let pname = Promise[String]
+      player.gathername(pname)
+      names.push(pname)
     end 
+    try 
+      let first = names(0)?
+      let remainder: Array[Promise[String]] = names.slice(1, names.size()) 
+      let joined: Promise[Array[String val] val] = first.join(remainder.values())
+      joined.next[None](recover p~apply() end)
+    end
 
   be closed(conn: TCPConnection tag) =>
     try      
