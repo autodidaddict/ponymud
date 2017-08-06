@@ -38,14 +38,7 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
         _conn.write(msg) 
 
     be gathername(p: Promise[String]) =>
-        p(_name())
-
-    be receivecollection(coll: Array[String] val) =>
-        _conn.write("\n==> Player Listing:\n")
-        for name in coll.values() do
-            _conn.write(name + "\n")
-        end
-        _conn.write("\nThere are " + coll.size().string() + " players connected.\n")
+        p(_name())     
     
     be parsecommand(cmd: String) =>
         if _pname is None then
@@ -64,10 +57,7 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
         else  
             this.tell("Unknown Command.\n")
         end           
-        //let p = Promise[ExaminationResult]
-        //p.next[None](recover this~ex() end)
-        //_currentloc.examine(p)
-
+        
     be emitall(text: String) =>
         _cm.broadcast(this, _name() + " " + text)
 

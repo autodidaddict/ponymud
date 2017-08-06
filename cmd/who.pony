@@ -20,7 +20,11 @@ actor CmdWho is CommandHandler
     p.next[None](recover this~_whofulfilled() end)
 
   be _whofulfilled(players: Array[String val] val) =>
-    _parent.tell("Players connected: " + players.size().string() + "\n")
+    _parent.tell("\n==> Player Listing:\n")
+    for name in players.values() do
+        _parent.tell(name + "\n")
+    end
+    _parent.tell("\nThere are " + players.size().string() + " players connected.\n")    
 
   be identify(p: Promise[CommandHandlerMetadata]) =>
     p(CommandHandlerMetadata("who", "players"))
