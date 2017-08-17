@@ -7,5 +7,9 @@ trait GameObject
   be move_force(to: Room tag) =>
     set_location(to)    
 
-  fun location(): Room tag
+  fun location(): Room tag  
   fun ref set_location(loc: Room tag)
+
+  be move(to: Room tag) =>
+    location().leave_inv(this, location())
+    location().enter_inv(this, to)

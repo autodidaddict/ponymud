@@ -29,7 +29,8 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
         _container = DefaultActorStorage 
         _currentloc = init_loc
 
-        _currentloc.enter_inv(this, _currentloc)
+        //_currentloc.enter_inv(this, _currentloc)
+        move(_currentloc)
 
         _conn.write(ResourceReader.read_resource(_respath, "motd.txt"))
         initcommands()
@@ -82,6 +83,7 @@ actor Player is (Container & Combatant & CommandHandlerContainer & TerminalConne
         CmdWho(this, _cm)
         CmdList(this)
         CmdExamine(this)
+        CmdGo(this)
         
     fun _name(): String =>
         match _pname
