@@ -5,15 +5,15 @@ trait Room is (Container & Examinable)
   be exits(p: Promise[Array[Exit] val])
 
 class val Exit
-  let _directions: Array[String] val
+  let _direction: String val
   let _destination: Room tag 
 
-  new create(directions': Array[String] val, destination': Room tag) =>
-    _directions = directions'
+  new create(direction': String val, destination': Room tag) =>
+    _direction = direction'
     _destination = destination'
 
   fun destination(): Room tag =>
     _destination 
 
-  fun directions(): Array[String] val =>
-    _directions
+  fun direction(): String val =>
+    _direction

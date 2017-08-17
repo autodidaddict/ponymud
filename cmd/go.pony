@@ -27,11 +27,12 @@ actor CmdGo is CommandHandler
       room.exits(p)
 
   be _exitroom(dir: String val, exits: Array[Exit] val) =>
-    try 
-      let e = exits(1)? // TODO pick the right exit from the list or report an error      
-      _parent.move(e.destination())
-      _parent.parsecommand("look")
-    end
+    for exit in exits.values() do 
+      if exit.direction() == dir then
+        _parent.move(exit.destination())
+        _parent.parsecommand("look")    
+      end 
+    end       
 
   be identify(p: Promise[CommandHandlerMetadata]) =>
     p(CommandHandlerMetadata("go", ""))

@@ -13,8 +13,8 @@ actor TheVoid is Room
     _exits = recover Array[Exit] end 
     _exits = recover val
       let e = Array[Exit]
-      e.push(recover Exit(recover ["west"] end, this) end)
-      e.push(recover Exit(recover ["east"] end, this) end)
+      e.push(recover Exit("west", this) end)
+      e.push(recover Exit("east", this) end)
       e 
     end
 
